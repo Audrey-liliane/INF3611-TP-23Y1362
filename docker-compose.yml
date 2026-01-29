@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  app:
+    image: hashicorp/vault:latest
+    container_name: vault_23Y1362
+    ports:
+      - "5280:8200" # Port assigné 5280 redirigé vers le port interne 8200
+    environment:
+      VAULT_ADDR: "http://127.0.0.1:8200"
+      VAULT_API_ADDR: ${ROOT_URL}
+    volumes:
+      - ./vault_app:/vault/file # BIND VOLUME OBLIGATOIRE
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - vault_network
+    restart: unless-stopped
+
+networks:
+  vault_network:
+    driver: bridge # Réseau user-defined OBLIGATOIRE
